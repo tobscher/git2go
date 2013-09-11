@@ -7,6 +7,7 @@ package git
 */
 import "C"
 import (
+	"runtime"
 	"unsafe"
 )
 
@@ -52,7 +53,6 @@ func (c *Config) LookupString(name string) (string, error) {
 
 	return C.GoString(ptr), nil
 }
-
 
 func (c *Config) LookupBool(name string) (bool, error) {
 	var out C.int
@@ -147,4 +147,9 @@ func (c *Config) Delete(name string) error {
 	}
 
 	return nil
+}
+
+func (c *Config) Free() {
+	runtime.SetFinalizer(c, nil)
+	C.git_config_free(c.ptr)
 }
