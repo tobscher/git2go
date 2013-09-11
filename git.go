@@ -138,6 +138,14 @@ func LastError() error {
 	return &GitError{C.GoString(err.message), int(err.klass)}
 }
 
+func gobool(val C.int) bool {
+	if val == 0 {
+		return false
+	}
+
+	return true
+}
+
 func cbool(b bool) C.int {
 	if (b) {
 		return C.int(1)
